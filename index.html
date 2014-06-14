@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<body>
+<a href='#' onclick='getobject()'>getobject</a>
+<script>
+  function getobject() {
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('get', '/getobject', true);
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState != 4) return; 
+
+      var myobject = JSON.parse(this.responseText);
+
+      console.log(myobject);
+      console.log(myobject.summ());
+
+    };
+    xhr.send(null);
+  }
+</script>
+</body>
+</html>
