@@ -1,24 +1,12 @@
 var http = require('http');
 var fs = require('fs');
 var url = require('url');
+var Order = require('./order')
 
-function ClassOrder(name, cost) {
-  this.name = name;
-  this.cost = cost;
-  this.parts = [];
-  this.summ = function() {
-    var summ = 0;
-    this.parts.forEach(function(part) {
-      summ += part.summ();
-    });
-    return summ + this.cost;
-  };
-}
-
-var myobject = new ClassOrder('my object', 10);
-myobject.parts[0] = new ClassOrder('my first part', 20);
-myobject.parts[1] = new ClassOrder('my second part', 30);
-myobject.parts[1].parts[0] = new ClassOrder('my first in second part', 40);
+var myobject = new Order({name:'my object', cost: 10});
+myobject.parts[0] = new Order({name:'my first part', cost: 20});
+myobject.parts[1] = new Order({name:'my second part', cost: 30});
+myobject.parts[1].parts[0] = new Order({name:'my first in second part', cost: 40});
 
 console.log(myobject);
 console.log(myobject.summ());
@@ -26,14 +14,17 @@ console.log(myobject.summ());
 http.createServer(function(req, res) {
   switch(req.url) {
     case '/':
-      sendFile("index.html", res);
+      sendFile('index.html', res);
+      break;
+    case '/order.js':
+      sendFile('order.js', res);
       break;
     case '/getobject':
       res.end(JSON.stringify(myobject));
       break;
     default:
       res.statusCode = 404;
-      res.end("Page not found!");
+      res.end('Page not found!');
   }
 }).listen(80);
 
@@ -42,7 +33,7 @@ function sendFile(fileName, res) {
   fileStream
     .on('error', function () {
       res.statusCode = 500;
-      res.end("Server error");
+      res.end('Server error');
     })
     .pipe(res)
     .on('close', function () {

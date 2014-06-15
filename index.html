@@ -1,5 +1,8 @@
 <!doctype html>
 <html>
+<head>
+<script src='order.js'></script>
+</head>
 <body>
 <a href='#' onclick='getobject()'>getobject</a>
 <script>
@@ -11,7 +14,8 @@
     xhr.onreadystatechange = function() {
       if (xhr.readyState != 4) return; 
 
-      var myobject = JSON.parse(this.responseText);
+      var xhrobj = JSON.parse(this.responseText);
+      var myobject = new Order(xhrobj);
 
       console.log(myobject);
       console.log(myobject.summ());
