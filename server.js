@@ -6,14 +6,17 @@ function ClassOrder(name, cost) {
   this.name = name;
   this.cost = cost;
   this.parts = [];
-  this.summ = function() {
-    var summ = 0;
-    this.parts.forEach(function(part) {
-      summ += part.summ();
-    });
-    return summ + this.cost;
-  };
+  this.summfunc = '\
+    var summ=0; \
+    obj.parts.forEach(function(part) { \
+      summ += part.summ(); \
+    }); \
+    return summ + obj.cost;';
 }
+
+ClassOrder.prototype.summ = function() {
+  return (new Function('obj', this.summfunc))(this);
+};
 
 var myobject = new ClassOrder('my object', 10);
 myobject.parts[0] = new ClassOrder('my first part', 20);
